@@ -1,6 +1,3 @@
-# Predicting defaults on student loans
-This is a CS3244 Machine Learning project that aims to predict the likelihood of the Education Bubble bursting and the factors leading to it.
-
 https://collegescorecard.ed.gov/data/[College Scorecard Dataset]
 https://collegescorecard.ed.gov/assets/CollegeScorecardDataDictionary.xlsx[Data Dictionary]
 https://collegescorecard.ed.gov/assets/FullDataDocumentation.pdf[Data Documentation]
