@@ -39,6 +39,8 @@ print("\nDataset description: \n", X_train.describe())
 from sklearn import datasets, metrics
 from sklearn.linear_model import Perceptron
 from sklearn import neighbors
+from sklearn.linear_model import LogisticRegression
+
 
 classifier = Perceptron(tol=None, max_iter =1000)
 
@@ -62,3 +64,13 @@ for i in range(1,6):
 
     print("The classification score for", i, "-NN is %.5f\n" % knn.score(X_test, y_test))
 
+
+
+
+model = LogisticRegression(C=1e20)
+model.fit(X_train, y_train)
+# print('The learned weights are {} {}'.format(model.intercept_, model.coef_))
+
+expected = y_test
+predicted = model.predict(X_test)
+print("The classification accuracy for logistic regression is %.5f\n" % (((predicted == y_test).mean())))
