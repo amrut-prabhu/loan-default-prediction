@@ -1,12 +1,12 @@
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('data/model_data.csv',sep=',')
+df = pd.read_csv('data/merged_without_null_greater_than_5000.csv',sep=',')
 
 print("Number of data points: %d \n" % df.shape[0])
 
 print("Number of defaults:")
-counts = df.DEFAULT.value_counts()
+counts = df.MD_EARN_WNE_P6.value_counts()
 print (counts)
 
 # from ggplot import *
@@ -16,12 +16,14 @@ print (counts)
 # Drop string field and id field
 df.drop('INSTNM', axis=1, inplace=True)
 df.drop('UNITID', axis=1, inplace=True)
+df.drop('CITY', axis=1, inplace=True)
+df.drop('STABBR', axis=1, inplace=True)
 print("The", df.shape[1], "features (and their data types) are: \n ", df.dtypes, "\n")
 
 
 # Partition the features from the class to predict
-df_X = df[df.columns[df.columns != 'DEFAULT']].copy()
-df_y = df['DEFAULT'].copy()
+df_X = df[df.columns[df.columns != 'MD_EARN_WNE_P6']].copy()
+df_y = df['MD_EARN_WNE_P6'].copy()
 
 # df['DEFAULT'].value_counts().plot(kind = 'bar', title = 'Distribution of classes')
 
@@ -36,41 +38,22 @@ print ("\nNumber of training instances: ", len(X_train), "\nNumber of test insta
 print("\nDataset description: \n", X_train.describe())
 
 
-from sklearn import datasets, metrics
-from sklearn.linear_model import Perceptron
-from sklearn import neighbors
-from sklearn.linear_model import LogisticRegression
+from sklearn import linear_model
+from sklearn.metrics import mean_squared_error, r2_score
 
 
-classifier = Perceptron(tol=None, max_iter =1000)
+# with sklearn
+regr = linear_model.LinearRegression()
+regr.fit(X_train, y_train)
 
-classifier.fit(X_train, y_train)
-
-expected = y_test
-predicted = classifier.predict(X_test)
-
-print("\n\n******************************RESULTS******************************\n")
-print("The classification score for linear classification is %.5f\n" % classifier.score(X_test, y_test))
-
-# print("Classification report for classifier %s:\n%s" % (classifier, metrics.classification_report(expected, predicted)))
-# print("Confusion matrix:\n%s" % metrics.confusion_matrix(expected, predicted))
-
-for i in range(1,6):
-    knn = neighbors.KNeighborsClassifier(n_neighbors = i)
-    knn.fit(X_train, y_train)
-
-    expected = y_test
-    predicted = knn.predict(X_test)
-
-    print("The classification score for", i, "-NN is %.5f\n" % knn.score(X_test, y_test))
+# Make predictions using the testing set
+y_pred = regr.predict(X_train)
 
 
-
-
-model = LogisticRegression(C=1e20)
-model.fit(X_train, y_train)
-# print('The learned weights are {} {}'.format(model.intercept_, model.coef_))
-
-expected = y_test
-predicted = model.predict(X_test)
-print("The classification accuracy for logistic regression is %.5f\n" % (((predicted == y_test).mean())))
+# The coefficients
+print('Coefficients: \n', regr.coef_)
+# The mean squared error
+print("Mean squared error: %.2f"
+      % mean_squared_error(y_train, y_pred))
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % r2_score(y_train, y_pred))
