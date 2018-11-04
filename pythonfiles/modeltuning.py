@@ -5,7 +5,7 @@ from sklearn.externals import joblib
 from sklearn.ensemble import RandomForestRegressor 
 from pprint import pprint
 
-df = pd.read_csv('data/New Datasets/multi-model-data-elements.csv',sep=',')
+df = pd.read_csv('https://drive.google.com/uc?export=download&id=1XoV8SfvHmzaxRuDRe81OWSQu10dYTbO5',sep=',')
 print("Number of data points: %d \n" % df.shape[0])
 
 print(df.columns.values);
@@ -17,7 +17,7 @@ df_X = df.iloc[:, 2:12].copy()
 df_X = pd.get_dummies(df_X)
 print(df_X.head())
 
-df_y = df[df.columns[12]].copy()
+df_y = df[df.columns[16]].copy()
 print(df_y.head())
 
 from sklearn.model_selection import train_test_split
@@ -29,34 +29,36 @@ print ("\nNumber of training instances: ", len(X_train), "\nNumber of test insta
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.model_selection import GridSearchCV
 
-# Number of trees in random forest
-#n_estimators = [int(x) for x in np.linspace(start = 1000, stop = 2000, num = 100)]
-# Number of features to consider at every split
-#max_features = ['auto', 'sqrt']
+#Number of trees in random forest
+n_estimators = [int(x) for x in np.linspace(start = 1300, stop = 1700, num = 50)]
+#Number of features to consider at every split
+max_features = ['auto', 'sqrt']
 # Maximum number of levels in tree
-#max_depth = [int(x) for x in np.linspace(10, 110, num = 11)]
-#max_depth.append(None)
+max_depth = [int(x) for x in np.linspace(30, 80, num = 10)]
+max_depth.append(None)
 # Method of selecting samples for training each tree
-#bootstrap = [True, False]
+bootstrap = [True, False]
 min_samples_split = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
 # Create the random grid
-random_grid = {'min_samples_split': min_samples_split}
-#                'n_estimators': n_estimators,
- #              'max_features': max_features,
-  #             'max_depth': max_depth,
-   #            'bootstrap': bootstrap}
+random_grid = {
+               'min_samples_split': min_samples_split,
+               'n_estimators': n_estimators,
+               'max_features': max_features,
+               'max_depth': max_depth,
+               'bootstrap': bootstrap
+	      }
 
 # print("\nDataset description: \n", X_train.describe())
 print("Creating model")
-model = RandomForestRegressor(n_estimators = 1686, n_jobs = -1, random_state = 50, max_features = "sqrt", min_samples_leaf = 1, max_depth = 40, min_samples_split = 0.1)
-pprint(model.get_params())
-#model = GridSearchCV(estimator = model, param_grid = random_grid, cv = 3, verbose=2, n_jobs = -1)
+model = RandomForestRegressor(n_jobs = -1) 
+#pprint(model.get_params())
+model = RandomizedSearchCV(estimator = model, param_distributions = random_grid, cv = 4, verbose=2, n_jobs = -1, n_iter = 150)
 print("Fitting model")
 model.fit(X_train, y_train)
-#pprint(model.best_params_)
-#model = model.best_estimator_
+pprint(model.best_params_)
+model = model.best_estimator_
 print("Saving model")
-joblib.dump(model, "BestRandomForestRegressor?.pkl")
+joblib.dump(model, "../pklfiles/RandomForestRegressorRandomizedSearchCV2Repayment.pkl")
 #print("Loading model")
 #model = joblib.load("RandomForestRegressor(1000)forcolnofortuning.pkl")
 print("Predicting model")

@@ -1,6 +1,5 @@
 .DS_Store
-<<<<<<< HEAD
 *.csv
 *.xlsx
-=======
->>>>>>> 07b4dcdab757ebe3712ef5bd4fc8739cbda1def4
+*.pkl
+*.pyc
