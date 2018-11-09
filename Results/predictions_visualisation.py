@@ -7,8 +7,14 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 def get_best_fit(fileName, filePath):
     df = pd.read_csv(filePath);
+    print("Total data points = ", len(df));
+    max_error = 100000;
 
-    df = filter_by_error(df, 5000);
+    # Choose rows where error is less than max_error
+    # for i in range(len(df['Error'])):
+    #   print(df['Error'][i]);
+    df = df[df['Error'] < max_error];
+    print("Selected points = ", len(df));
 
     x = df['Actual'].values;
     y = df['Predicted'].values;
@@ -36,9 +42,6 @@ def get_best_fit(fileName, filePath):
     regr_y = model.predict(regr_x.reshape(-1, 1));
     plt.plot(regr_x, regr_y, c='red');
     plt.show();
-
-def filter_by_error(df, max_error):
-
 
 # Main program
 prediction_results_dir = ".\\Predictions";
