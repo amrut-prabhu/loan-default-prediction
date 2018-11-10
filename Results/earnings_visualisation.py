@@ -8,11 +8,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
+max_error = 10000;
+
 def get_best_fit(fileName, filePath, model_used):
     df = pd.read_csv(filePath);
     total_pts = len(df); # 9725
-
-    max_error = 10000;
 
     # Choose rows where error is less than max_error
     df = df[df['Error'] < max_error];
@@ -89,7 +89,7 @@ def plot_models_results(code, models, max_val):
     plt.ylabel('Predicted Earnings');
     plt.legend(handles=[green_patch, blue_patch, purple_patch, black_patch, red_patch]);
 
-    plt.savefig(thisdict[code] + '_years.png', dpi=400);
+    plt.savefig('earnings_' + thisdict[code] + '_years_limit_' + str(max_error) + '.png', dpi=400);
     plt.show();
 
 # Main program
