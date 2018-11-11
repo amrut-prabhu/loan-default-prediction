@@ -33,11 +33,23 @@ max_depth = [int(x) for x in np.linspace(20, 100, num = 10)]
 max_depth.append(None)
 min_samples_split = [0.01, 0.05, 0.1, 0.2, 0.3]
 
-model = RandomForestRegressor(max_depth = 80, min_samples_split = 0.1, max_features = 'sqrt', bootstrap = False, n_jobs = -1, random_state = 1)
-grid_obj = GridSearchCV(scoring = make_scorer(import_accuracy), estimator = model, n_jobs = -1,  param_grid = {'n_estimators': n_estimators}, verbose = 2)
-grid_obj.fit(X_train, y_train)
-scores = grid_obj.cv_results_['mean_test_score'].reshape(len(n_estimators))
-print(scores)
+error_rate = []
+model = RandomForestRegressor(warm_start=True, oob_score=True, max_depth = 80, min_samples_split = 0.1, max_features = 'sqrt', bootstrap = True, n_jobs = -1, random_state = 1)
+
+for i in n_estimators: 
+	model.set_params(n_estimators=i)
+        model.fit(df_X, df_y)
+
+        # Record the OOB error for each `n_estimators=i` setting.
+        oob_error = 1 - model.oob_score_
+        error_rate.append((i, oob_error))
+
+print(error_rate)
+
+#grid_obj = GridSearchCV(scoring = make_scorer(import_accuracy), estimator = model, n_jobs = -1,  param_grid = {'n_estimators': n_estimators}, verbose = 2)
+#grid_obj.fit(X_train, y_train)
+#scores = grid_obj.cv_results_['mean_test_score'].reshape(len(n_estimators))
+#print(scores)
 
 #plt.figure(figsize=(8, 6))
 #plt.subplots_adjust(left=.2, right=0.95, bottom=0.15, top=0.95)

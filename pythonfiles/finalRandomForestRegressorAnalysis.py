@@ -28,24 +28,24 @@ def accuracy(model, X_test, y_test):
 	    accuracy = 100 - np.mean(mape[col])
 	    print('Accuracy:', round(accuracy, 2), '%.')
 
-model1 = RegressorChain(RandomForestRegressor(n_estimators = 1650, max_depth = 80, min_samples_split = 0.1, max_features = 'sqrt', bootstrap = False, n_jobs = -1, random_state = 1))
+model1 = RegressorChain(RandomForestRegressor(n_estimators = 1650, max_depth = 80, min_samples_split = 0.1, max_features = 'sqrt', bootstrap = False, n_jobs = -1, random_state = 1), cv = 3)
 model2 = MultiOutputRegressor(RandomForestRegressor(n_estimators = 1650, max_depth = 80, min_samples_split = 0.1, max_features = 'sqrt', bootstrap = False, n_jobs = -1, random_state = 2))
-#model1.fit(X_train, y_train)
-#joblib.dump(model1, "RegressorChainRandomForestRegressorEarnings.pkl")
-#print("Model 1: ");
-#accuracy(model1, X_test, y_test)
-#model2.fit(X_train, y_train)
-#joblib.dump(model2, "MultipleOutputRandomForestRegressorEarnings.pkl")
-#print("Model 2: ");
-#accuracy(model2, X_test, y_test)
+model1.fit(X_train, y_train)
+joblib.dump(model1, "RegressorChainRandomForestRegressorEarningsNew.pkl")
+print("Model 1: ");
+accuracy(model1, X_test, y_test)
+model2.fit(X_train, y_train)
+joblib.dump(model2, "MultipleOutputRandomForestRegressorEarningsNew.pkl")
+print("Model 2: ");
+accuracy(model2, X_test, y_test)
 
 X_train, X_test, y_train, y_test = train_test_split(df_X, df_y2, test_size=0.2, random_state=0)
 
-#model1.fit(X_train, y_train)
-#joblib.dump(model1, "RegressorChainRandomForestRegressorRepayment.pkl")
-#print("Model 3: ");
-#accuracy(model1, X_test, y_test)
+model1.fit(X_train, y_train)
+joblib.dump(model1, "RegressorChainRandomForestRegressorRepaymentNew.pkl")
+print("Model 3: ");
+accuracy(model1, X_test, y_test)
 model2.fit(X_train, y_train)
-joblib.dump(model2, "MultipleOutputRandomForestRegressorRepayment.pkl")
+joblib.dump(model2, "MultipleOutputRandomForestRegressorRepaymentNew.pkl")
 print("Model 4: ");
 accuracy(model2, X_test, y_test)
