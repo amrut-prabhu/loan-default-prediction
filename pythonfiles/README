@@ -1,0 +1,14 @@
+8models.py -> Script to build individual models without using sklearn's multiple output library
+depth_samples.csv -> Effect of max_depth on the model
+estimators.csv -> Effect of number of estimators on the model 
+finalGradientBoostingRegressorAnalysis.py -> Build the gradient boosting model for earnings and repayments
+finalRandomForestRegressorAnalysis.py -> Build the random forest regressors for earnings and repayments
+gradientBoostingRegressorHyperParamterTuningPlot.py -> Hyper Paramater tuning results stored in csv(s) for gradient boosting regressor
+loss_learning-rate.csv -> Effect of loss function and learning rate
+min-leafs.csv -> Effect of minimum number of samples at leaf
+model.py -> Baseline model 
+modelTuning2.py -> Hyper parameter tuning
+modeltuning.py -> Hyper paramter tuning
+randomForestRegressorAccuracyHyperParameterTuningPlot.py -> Hyper Paramater tuning results stored in csv(s) for random forest regressor
+results.py -> Plotting script
+testing.py -> Testing model on whole dataset
